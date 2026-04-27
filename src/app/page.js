@@ -6,6 +6,7 @@ import { useUserStore } from "@/store/useUserStore"
 import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { fetchUsers } from "./API/user";
 
 export default function Home() {
   const { user, logout } = useUserStore();
@@ -13,21 +14,19 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch('http://localhost:3003/users');
 
-        if (!res.ok) {
-          throw new Error('서버 응답 에러');
+    const getUser = async () => {
+      if (!user) {
+        try {
+          const data = await fetchUsers();
+          if (data)
+            login(data);
+        } catch (error) {
+          console.error('유저불러오기실패', error)
         }
-        const data = await res.json();
-
-        login(data);
-      } catch (error) {
-        console.error('유저 불러오기 실패:', error)
       }
-    };
-    fetchUser();
+      getUser();
+    }
   }, []);
 
   return (
