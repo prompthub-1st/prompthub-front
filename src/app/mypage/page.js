@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/useUserStore";
 import PromptList from "@/components/common/PromptList";
@@ -8,16 +8,16 @@ import PromptList from "@/components/common/PromptList";
 export default function MyPage() {
     const router = useRouter();
     const user = useUserStore((state) => state.user);
-    const isReady = useUserStore((state) => state.isReady)
+
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        if (isReady && !user) {
-            router.push('/')
-        }
-    }, [user, isReady])
+        setMounted(true);
+    }, [])
 
-    if (!isReady) {
-        return <p>로딩중...</p>;
+    if (!mounted) return;
+    if (!user) {
+        router.replace('/')
     }
 
     if (!user) {
