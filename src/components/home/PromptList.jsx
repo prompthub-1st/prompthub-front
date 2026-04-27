@@ -2,11 +2,12 @@ import { fetchAllData } from "@/api/promptService";
 import { useFilterStore } from "@/store/useFilterStore";
 import { useQuery } from "@tanstack/react-query";
 import PromptCard from "../common/PromptCard";
+import Pagination from "./Pagination";
 
 export default function PromptList() {
   // 필터 조건 꺼내오기
   const { selectedCategory, searchKeyword, page } = useFilterStore();
-  const ITEMS_PER_PAGE = 8;
+  const ITEMS_PER_PAGE = 10;
 
   // 서버에서 전체 데이터 가져오기
   const { data, isLoading, isError } = useQuery({
@@ -41,14 +42,22 @@ export default function PromptList() {
   });
 
   // 📖 페이지네이션
+  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
   const paginatedData = filteredData.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
-      {paginatedData.map(prompt => (
-        <PromptCard key={prompt.id} prompt={prompt} />
-      ))}
-      {paginatedData.length === 0 && <p>데이터가 없습니다.</p>}
-    </div>
+    <>
+    <section>
+      <div>
+        {paginatedData.map(prompt => (
+          <PromptCard key={prompt.id} prompt={prompt} />
+        ))}
+
+        <Pagination totalPages={totalPages} />
+        {paginatedData.length === 0 && <p>데이터가 없습니다.</p>}
+      </div>
+    </section>
+    </>
+
   );
 }
