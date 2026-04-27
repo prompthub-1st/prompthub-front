@@ -98,6 +98,12 @@ export default function UploadPage() {
         </section>
         <section>
           <button
+            type="button"
+            onClick={() => router.back()}
+          >
+            취소
+          </button>
+          <button
             type="submit"
             disabled={mutation.isPending}
           >

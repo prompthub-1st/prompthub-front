@@ -3,6 +3,7 @@
 import CategoryFilter from "@/components/home/CategoryFilter"
 import PromptList from "@/components/home/PromptList"
 import { useUserStore } from "@/store/useUserStore"
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -35,6 +36,15 @@ export default function Home() {
         <h2>User: {user ? user.name : '로그인 전'}</h2>
         <button onClick={() => login({ name: 'user1' })}>로그인</button>
         <button onClick={logout}>로그아웃</button>
+      </section>
+      <hr />
+      <br />
+      <section>
+        {user && (
+          <Link href="/upload">
+            <button>프롬프트 업로드</button>
+          </Link>
+        )}
       </section>
       <section>
         <CategoryFilter />
