@@ -1,20 +1,35 @@
 'use client'
 
-import { fetchAllData } from "@/api/promptService";
-import { useQuery } from "@tanstack/react-query";
+import { deletePrompt, fetchAllData, fetchPromptById } from "@/api/promptService";
+import { useUserStore } from "@/store/useUserStore";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function PromptDetailPage() {
-  const params = useParams();
+  const { promptId } = useParams();
   const router = useRouter();
-  const promptId = params.promptId;
+  const queryClient = useQueryClient();
+  const { user: loginUser } = useUserStore();
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['prompts', 'all'],
+  const { data: allData, isLoading, isError } = useQuery({
+    queryKey: ['prompts', 'all'], 
     queryFn: fetchAllData,
   });
+
   const [copyText, setCopyText] = useState("프롬프트 복사하기")
+
+  const deleteMutation = useMutation({
+    mutationFn: () => deletePrompt(promptId),
+    onSuccess: () => {
+      // 삭제 후 리스트 캐시 무효화 및 이동
+      queryClient.invalidateQueries({ queryKey: ['prompts', 'all']});
+      router.push('/');
+    },
+    onError: () => {
+      alert("삭제 중 오류가 발생했습니다.");
+    }
+  });
 
   const handleCopy = async(text) => {
     try {
@@ -34,16 +49,21 @@ export default function PromptDetailPage() {
     }
   };
 
+  const handleDelete = () => {
+    if (window.confirm("정말로 이 프롬프트를 삭제하시겠습니까?")) {
+      deleteMutation.mutate();
+    }
+  };
 
-  if (isLoading) return <div>상세 정보를 불러오는 중...</div>;
-  if (isError) return <div>상세 정보를 불러오는데 실패했습니다.</div>;
 
-  const prompt = data.prompts.find(p => String(p.id) === String(promptId));
+  if (isLoading) return <div>데이터 로딩 중...</div>;
+  if (isError) return <div>데이터를 불러오지 못했습니다.</div>;
 
-  if (!prompt) return <div>존재하지 않는 프롬프트입니다.</div>;
+  const prompt = allData.prompts.find(p => String(p.id) === String(promptId));
+  if (!prompt) return <div>존재하지 않는 프롬프트입니다.</div>
 
-  const userName = data.users.find(u => String(u.id) === String(prompt.userId))?.name || '익명';
-  const categoryName = data.categories.find(c => String(c.id) === String(prompt.categoryId))?.name || '미분류';
+  const userName = allData.users.find(u => String(u.id) === String(prompt.userId))?.name || '익명';
+  const categoryName = allData.categories.find(c => String(c.id) === String(prompt.categoryId))?.name || '미분류';
 
   return(
     <>
@@ -52,6 +72,19 @@ export default function PromptDetailPage() {
           <h1>{prompt.title}</h1>
           <p>작성자: {userName}</p>
           <p>카테고리: {categoryName}</p>
+          {loginUser && String(loginUser.id) === String(prompt.userId) && (
+            <div>
+              <button
+                onClick={() => router.push(`/prompts/edit/${promptId}`)}
+              >수정</button>
+              <button
+                onClick={handleDelete}
+                disabled={deleteMutation.isPending}
+              >
+                {deleteMutation.isPending ? '삭제 중...' : '삭제하기'}
+              </button>
+            </div>
+          )}
         </section>
         <hr />
         <br />

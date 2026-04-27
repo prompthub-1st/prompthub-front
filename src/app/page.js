@@ -3,6 +3,7 @@
 import CategoryFilter from "@/components/home/CategoryFilter"
 import PromptList from "@/components/home/PromptList"
 import { useUserStore } from "@/store/useUserStore"
+import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -40,6 +41,15 @@ export default function Home() {
         <button onClick={logout}>로그아웃</button>
         {user && (
           <button onClick={() => router.push('/mypage')}>마이페이지 가기</button>
+        )}
+      </section>
+      <hr />
+      <br />
+      <section>
+        {user && (
+          <Link href="/upload">
+            <button>프롬프트 업로드</button>
+          </Link>
         )}
       </section>
       <section>
