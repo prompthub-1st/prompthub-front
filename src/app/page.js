@@ -26,21 +26,6 @@ export default function Home() {
         }
       }
       getUser();
-      // const fetchUser = async () => {
-      //   try {
-      //     const res = await fetch('http://localhost:3003/users');
-
-      //     if (!res.ok) {
-      //       throw new Error('서버 응답 에러');
-      //     }
-      //     const data = await res.json();
-
-      //     login(data);
-      //   } catch (error) {
-      //     console.error('유저 불러오기 실패:', error)
-      //   }
-      // };
-      // fetchUser();
     }
   }, []);
 
