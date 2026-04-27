@@ -6,6 +6,7 @@ import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/re
 import { useParams } from "next/navigation"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import styles from "./page.module.css";
 
 export default function PromptEditPage() {
   const { promptId } = useParams();
@@ -65,70 +66,82 @@ export default function PromptEditPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.categoryId) return alert("카테고리를 선택해주세요!");
-    mutation.mutate(formData);
+    const payload = {
+      id: promptId,
+      ...formData,
+      userId: loginUser.id
+    };
+    mutation.mutate(payload);
   };
 
-  if (isLoading) return <div>기본 정보를 불러오는 중...</div>
+  if (isLoading) return <div className={styles.loading}>기본 정보를 불러오는 중...</div>
 
   return (
-    <>
-      <h1>프롬프트 수정하기</h1>
-      <form onSubmit={handleSubmit}>
-        <section>
-          <label>카테고리 선택</label>
-          <div>
+    <div className={styles.container}>
+      <h1 className={styles.title}>프롬프트 수정하기</h1>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.section}>
+          <label className={styles.label}>카테고리 선택</label>
+          <div className={styles.categoryContainer}>
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 type="button"
+                className={`${styles.categoryButton} ${formData.categoryId === String(cat.id) ? styles.selected : ''}`}
                 onClick={() => setFormData({ ...formData, categoryId: String(cat.id)})}>
                 {cat.name}
               </button>
             ))}
           </div>
-        </section>
-        <section>
-          <label htmlFor="title">프롬프트 제목: </label>
+        </div>
+        <div className={styles.section}>
+          <label htmlFor="title" className={styles.label}>프롬프트 제목</label>
           <input
             id="title"
+            className={styles.input}
             placeholder="제목을 입력하세요"
-            value={formData.title} // 현재 상태값(기존 제목)을 보여줌
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })} // 입력 시 상태 업데이트
+            value={formData.title}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           />
-        </section>
-        <section>
-          <label htmlFor="description">프롬프트 소개: </label>
+        </div>
+        <div className={styles.section}>
+          <label htmlFor="description" className={styles.label}>프롬프트 소개</label>
           <textarea
             id="description"
+            className={styles.textarea}
             placeholder="프롬프트 소개를 입력하세요"
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           />
-        </section>
-        <section>
-          <label htmlFor="content">프롬프트 내용: </label>
+        </div>
+        <div className={styles.section}>
+          <label htmlFor="content" className={styles.label}>프롬프트 내용</label>
           <textarea
             id="content"
+            className={styles.textarea}
             placeholder="프롬프트 내용을 입력하세요"
             value={formData.content}
             onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+            style={{ minHeight: '200px' }}
           />
-        </section>
-        <section>
+        </div>
+        <div className={styles.actions}>
           <button
             type="button"
+            className={styles.cancelButton}
             onClick={() => router.push('/')}
           >
             취소
           </button>
           <button
             type="submit"
+            className={styles.submitButton}
             disabled={mutation.isPending}
           >
             {mutation.isPending ? '저장 중...' : '수정 완료'}
           </button>
-        </section>
+        </div>
       </form>
-    </>
+    </div>
   )
 }

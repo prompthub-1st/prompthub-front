@@ -3,6 +3,7 @@ import { useFilterStore } from "@/store/useFilterStore";
 import { useQuery } from "@tanstack/react-query";
 import PromptCard from "../common/PromptCard";
 import Pagination from "./Pagination";
+import styles from "./PromptList.module.css";
 
 export default function PromptList() {
   // 필터 조건 꺼내오기
@@ -15,9 +16,9 @@ export default function PromptList() {
     queryFn: fetchAllData,
   });
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (isError) return <div>데이터 로드 실패!</div>;
-  if (!data || !data.prompts) return <div>데이터가 비어있습니다.</div>;
+  if (isLoading) return <div className={styles.loading}>로딩 중...</div>;
+  if (isError) return <div className={styles.error}>데이터 로드 실패!</div>;
+  if (!data || !data.prompts) return <div className={styles.empty}>데이터가 비어있습니다.</div>;
 
   // 직접 합치기(Join)
   const enrichedPrompts = data.prompts.map(prompt => {
@@ -46,18 +47,19 @@ export default function PromptList() {
   const paginatedData = filteredData.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   return (
-    <>
-    <section>
-      <div>
-        {paginatedData.map(prompt => (
-          <PromptCard key={prompt.id} prompt={prompt} />
-        ))}
-
-        <Pagination totalPages={totalPages} />
-        {paginatedData.length === 0 && <p>데이터가 없습니다.</p>}
-      </div>
-    </section>
-    </>
-
+    <div className={styles.container}>
+      {paginatedData.length === 0 ? (
+        <p className={styles.empty}>검색 결과가 없습니다.</p>
+      ) : (
+        <>
+          <div className={styles.grid}>
+            {paginatedData.map(prompt => (
+              <PromptCard key={prompt.id} prompt={prompt} />
+            ))}
+          </div>
+          <Pagination totalPages={totalPages} />
+        </>
+      )}
+    </div>
   );
 }
