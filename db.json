@@ -81,12 +81,11 @@
       "userId": 3
     },
     {
-      "id": "11",
       "title": "SQL 쿼리 최적화 도우미",
       "description": "느린 SQL 쿼리를 분석하여 인덱스 활용이나 조인 방식 개선안을 제안합니다.",
       "content": "너는 DB 관리자(DBA)야. 내가 작성한 SQL 쿼리와 테이블 구조를 알려주면, 실행 속도를 높일 수 있는 튜닝 방안을 설명해줘. 특히 SQLD 관점에서 성능 저하 원인을 짚어줘.",
-      "categoryId": 3,
-      "userId": 1
+      "categoryId": "3",
+      "id": "11"
     },
     {
       "id": "12",
@@ -97,12 +96,11 @@
       "userId": 2
     },
     {
-      "title": "공부에 유용한 프롬프트",
-      "description": "공부를 잘 하게 해주는 프롬프트 입니다.",
-      "content": "지금 하고있는 공부에 대해서 요약과 상세한 설명을 둘다 도출해줘. ",
-      "categoryId": "2",
-      "userId": 1,
-      "id": "2BbPOHDpmBU"
+      "title": "ㅎㅇgd",
+      "description": "ㅎㅇㅎㅇ",
+      "content": "ㅎㅇㅎㅇㅎㅇ",
+      "categoryId": "5",
+      "id": "5XeWmr4C_ks"
     }
   ],
   "users": [

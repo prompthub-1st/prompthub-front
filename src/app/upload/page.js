@@ -1,6 +1,6 @@
 'use client'
 
-import { fetchAllData } from "@/api/promptService";
+import { createPrompt, fetchAllData } from "@/api/promptService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -25,11 +25,7 @@ export default function UploadPage() {
 
   // 전송 로직
   const mutation = useMutation({
-    mutationFn: (newPrompt) => fetch('http://localhost:3003/prompts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newPrompt)
-    }),
+    mutationFn: createPrompt,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['prompts', 'all' ] });
       router.push('/');
