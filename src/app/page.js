@@ -4,9 +4,12 @@ import CategoryFilter from "@/components/home/CategoryFilter"
 import PromptList from "@/components/home/PromptList"
 import { useUserStore } from "@/store/useUserStore"
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-    const { user, login, logout } = useUserStore();
+  const { user, logout } = useUserStore();
+  const login = useUserStore((state) => state.login)
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -33,8 +36,11 @@ export default function Home() {
       </section>
       <section>
         <h2>User: {user ? user.name : '로그인 전'}</h2>
-        <button onClick={() => login({ name: 'user1' })}>로그인</button>
+        <button onClick={() => login({ id: 1, name: 'user1' })}>로그인</button>
         <button onClick={logout}>로그아웃</button>
+        {user && (
+          <button onClick={() => router.push('/mypage')}>마이페이지 가기</button>
+        )}
       </section>
       <section>
         <CategoryFilter />

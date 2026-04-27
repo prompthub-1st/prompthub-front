@@ -7,11 +7,11 @@ export const useUserStore = create((set) => ({
     user: null,
     loading: false,
     error: null,
+    isReady: false,
 
-
-    login: (userData) => set({ user: userData }),
-    logout: () => set({ user: null }),
-    setUser: (user) => set({ user }),
+    login: (user) => set({ user, isReady: true }),
+    logout: () => set({ user: null, isReady: true }),
+    setUser: (user) => set({ user, isReady: true }),
 
     fetchUser: async () => {
         set({ loading: true });
