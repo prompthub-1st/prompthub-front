@@ -6,6 +6,7 @@ const BASE_URL = 'http://localhost:3003'
 export const useUserStore = create((set) => ({
     user: null,
     loading: false,
+    error: null,
 
 
     login: (userData) => set({ user: userData }),
@@ -16,7 +17,7 @@ export const useUserStore = create((set) => ({
         set({ loading: true });
 
         try {
-            const res = await fetch('http://localhost:3003/users/1')
+            const res = await fetch(`${BASE_URL}/users/1`)
             const data = await res.json();
 
             set({ user: data });
