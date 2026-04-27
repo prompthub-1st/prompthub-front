@@ -5,6 +5,7 @@ import { useUserStore } from "@/store/useUserStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import styles from "./page.module.css";
 
 export default function PromptDetailPage() {
   const { promptId } = useParams();
@@ -13,7 +14,7 @@ export default function PromptDetailPage() {
   const { user: loginUser } = useUserStore();
 
   const { data: allData, isLoading, isError } = useQuery({
-    queryKey: ['prompts', 'all'], 
+    queryKey: ['prompts', 'all'],
     queryFn: fetchAllData,
   });
 
@@ -56,28 +57,38 @@ export default function PromptDetailPage() {
   };
 
 
-  if (isLoading) return <div>데이터 로딩 중...</div>;
-  if (isError) return <div>데이터를 불러오지 못했습니다.</div>;
+  if (isLoading) return <div className={styles.loading}>데이터 로딩 중...</div>;
+  if (isError) return <div className={styles.error}>데이터를 불러오지 못했습니다.</div>;
 
   const prompt = allData.prompts.find(p => String(p.id) === String(promptId));
-  if (!prompt) return <div>존재하지 않는 프롬프트입니다.</div>
+  if (!prompt) return <div className={styles.notFound}>존재하지 않는 프롬프트입니다.</div>
 
   const userName = allData.users.find(u => String(u.id) === String(prompt.userId))?.name || '익명';
   const categoryName = allData.categories.find(c => String(c.id) === String(prompt.categoryId))?.name || '미분류';
 
   return(
-    <>
+    <div className={styles.container}>
       <article>
-        <section>
-          <h1>{prompt.title}</h1>
-          <p>작성자: {userName}</p>
-          <p>카테고리: {categoryName}</p>
+        <div className={styles.header}>
+          <h1 className={styles.title}>{prompt.title}</h1>
+          <div className={styles.meta}>
+            <span className={styles.metaItem}>
+              <strong>작성자:</strong> {userName}
+            </span>
+            <span className={styles.metaItem}>
+              <strong>카테고리:</strong> {categoryName}
+            </span>
+          </div>
           {loginUser && String(loginUser.id) === String(prompt.userId) && (
-            <div>
+            <div className={styles.actions}>
               <button
+                className={styles.editButton}
                 onClick={() => router.push(`/prompts/edit/${promptId}`)}
-              >수정</button>
+              >
+                수정
+              </button>
               <button
+                className={styles.deleteButton}
                 onClick={handleDelete}
                 disabled={deleteMutation.isPending}
               >
@@ -85,35 +96,40 @@ export default function PromptDetailPage() {
               </button>
             </div>
           )}
-        </section>
-        <hr />
-        <br />
-        <section>
-          <h3>프롬프트 설명</h3>
-          <p>
+        </div>
+
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>프롬프트 설명</h3>
+          <p className={styles.description}>
             {prompt.description}
           </p>
-        </section>
-        <section>
-          <h3>프롬프트 내용</h3>
-          <button
-            onClick={() => handleCopy(prompt.content)}
-            disabled={copyText !== "프롬프트 복사하기"}
-          >
-            {copyText}
-          </button>
-          <pre>
+        </div>
+
+        <div className={styles.section}>
+          <div className={styles.contentHeader}>
+            <h3 className={styles.sectionTitle}>프롬프트 내용</h3>
+            <button
+              className={styles.copyButton}
+              onClick={() => handleCopy(prompt.content)}
+              disabled={copyText !== "프롬프트 복사하기"}
+            >
+              {copyText}
+            </button>
+          </div>
+          <pre className={styles.codeBlock}>
             {prompt.content}
           </pre>
-        </section>
-        <section>
+        </div>
+
+        <div>
           <button
+            className={styles.backButton}
             onClick={() => router.back()}
           >
             뒤로가기
           </button>
-        </section>
+        </div>
       </article>
-    </>
+    </div>
   )
 }

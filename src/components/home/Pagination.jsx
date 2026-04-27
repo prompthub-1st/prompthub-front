@@ -1,6 +1,7 @@
 'use client';
 
 import { useFilterStore } from "@/store/useFilterStore";
+import styles from "./Pagination.module.css";
 
 export default function Pagination({ totalPages }) {
   const { page, setPage } = useFilterStore();
@@ -11,8 +12,9 @@ export default function Pagination({ totalPages }) {
   if (totalPages <= 1) return null;
 
   return (
-    <div>
+    <div className={styles.container}>
       <button
+        className={`${styles.button} ${styles.navButton}`}
         disabled={page === 1}
         onClick={() => setPage(page - 1)}
       >
@@ -21,12 +23,14 @@ export default function Pagination({ totalPages }) {
       {pageNumbers.map((num) => (
         <button
           key={num}
+          className={`${styles.button} ${page === num ? styles.active : ''}`}
           onClick={() => setPage(num)}
         >
           {num}
         </button>
       ))}
       <button
+        className={`${styles.button} ${styles.navButton}`}
         disabled={page === totalPages}
         onClick={() => setPage(page + 1)}
       >

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchUsers } from "./API/user";
+import styles from "./page.module.css";
 
 export default function Home() {
   const { user, logout } = useUserStore();
@@ -30,31 +31,46 @@ export default function Home() {
   }, []);
 
   return (
-    <>
-      <section>
-        <h1>프롬프트 저장소</h1>
+    <div className={styles.container}>
+      <section className={styles.header}>
+        <h1 className={styles.title}>Prompt Hub</h1>
       </section>
-      <section>
-        <h2>User: {user ? user.name : '로그인 전'}</h2>
-        <button onClick={() => login({ id: 1, name: 'user1' })}>로그인</button>
-        <button onClick={logout}>로그아웃</button>
-        {user && (
-          <button onClick={() => router.push('/mypage')}>마이페이지 가기</button>
-        )}
+
+      <section className={styles.userSection}>
+        <div className={styles.userInfo}>
+          <span className={styles.userName}>
+            {user ? `${user.name}님` : '로그인 전'}
+          </span>
+        </div>
+        <div className={styles.userActions}>
+          <button className="secondary" onClick={() => login({ id: 1, name: 'user1' })}>
+            로그인
+          </button>
+          <button className="secondary" onClick={logout}>
+            로그아웃
+          </button>
+          {user && (
+            <button className="primary" onClick={() => router.push('/mypage')}>
+              마이페이지
+            </button>
+          )}
+        </div>
       </section>
-      <hr />
-      <br />
-      <section>
-        {user && (
+
+      {user && (
+        <section className={styles.uploadSection}>
           <Link href="/upload">
-            <button>프롬프트 업로드</button>
+            <button className={styles.uploadButton}>
+              ✨ 프롬프트 업로드
+            </button>
           </Link>
-        )}
-      </section>
-      <section>
+        </section>
+      )}
+
+      <section className={styles.promptsSection}>
         <CategoryFilter />
         <PromptList />
       </section>
-    </>
+    </div>
   )
 }

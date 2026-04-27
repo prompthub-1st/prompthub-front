@@ -3,7 +3,7 @@
 import { usePromptStore } from "@/store/usePromptStore";
 import { useEffect } from "react";
 import PromptCard from "./PromptCard";
-
+import styles from "./PromptList.module.css";
 
 export default function PromptList({ userId }) {
 
@@ -20,13 +20,15 @@ export default function PromptList({ userId }) {
     }, [userId]);
 
     return (
-        <div>
+        <div className={styles.container}>
             {prompts.length === 0 ? (
-                <p>프롬프트가 없습니다.</p>
+                <p className={styles.empty}>프롬프트가 없습니다.</p>
             ) : (
-                prompts.map((prompt) => (
-                    <PromptCard key={prompt.id} prompt={prompt} />
-                ))
+                <div className={styles.grid}>
+                    {prompts.map((prompt) => (
+                        <PromptCard key={prompt.id} prompt={prompt} />
+                    ))}
+                </div>
             )}
         </div>
     )
