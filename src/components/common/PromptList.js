@@ -19,16 +19,14 @@ export default function PromptList({ userId }) {
         fetchPrompts(userId);
     }, [userId]);
 
-    console.log("🔥 prompts:", prompts);
-
     return (
         <div>
             {prompts.length === 0 ? (
                 <p>프롬프트가 없습니다.</p>
             ) : (
-                prompts.map((prompt) => {
+                prompts.map((prompt) => (
                     <PromptCard key={prompt.id} prompt={prompt} />
-                })
+                ))
             )}
         </div>
     )

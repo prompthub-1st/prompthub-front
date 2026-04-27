@@ -8,7 +8,6 @@ export default function PromptCard({ prompt }) {
           <p>{prompt.categoryName}</p>
           <h3>{prompt.title}</h3>
           <p>{prompt.userName}</p>
-          <p>{prompt.userId}</p>
         </div>
       </Link>
     </>
