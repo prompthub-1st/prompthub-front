@@ -322,13 +322,10 @@ return (
 );
 ```
 
+<br>
+
+👉 현재 데이터 정규화 이슈로, 모든 데이터를 한 번에 받아와서 Client-side Join + 캐싱 하는 방식을 채택함.
+
+👉  추후 실제 백엔드 구현 시 서버가 JOIN 쿼리를 날려서 합쳐진 결과를 주는 형식으로 리팩토링 예정
+
 <br><br>
-
-📌 리스트 렌더링 효율화
-
-```JavaScript
-{filteredPrompts.map((prompt) => (
-  <PromptCard key={prompt.id} prompt={prompt} />
-))}
-```
-👉 고유 Key 값을 부여하여 리액트 가상 DOM의 렌더링 성능 최적화
