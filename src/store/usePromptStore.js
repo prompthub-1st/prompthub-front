@@ -16,7 +16,7 @@ export const usePromptStore = create((set) => ({
 
             set({ prompts: data })
         } catch (error) {
-            console.error(err);
+            console.error(error);
         }
     }
 }))
