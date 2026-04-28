@@ -4,6 +4,28 @@ AI 프롬프트를 공유하고 나만의 최적화된 프롬프트를 관리하
 
 </br>
 
+## ✅ 로컬 실행 시 준비사항
+
+* 프론트 서버 실행
+```bash
+# 초기 프로젝트 클론 시
+npm install
+
+# 로컬 서버 실행
+npm run dev
+```
+
+</br>
+
+* json-server 실행 (포트 3003으로 고정)
+
+```bash
+npx json-server --watch db.json --port 3003
+```
+
+
+</br></br>
+
 ## 💡 서비스 소개
 
 ### 서비스 배경
