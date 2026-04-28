@@ -63,8 +63,8 @@ export default function PromptDetailPage() {
   const prompt = allData.prompts.find(p => String(p.id) === String(promptId));
   if (!prompt) return <div className={styles.notFound}>존재하지 않는 프롬프트입니다.</div>
 
-  const userName = allData.users.find(u => String(u.id) === String(prompt.userId))?.name || '익명';
-  const categoryName = allData.categories.find(c => String(c.id) === String(prompt.categoryId))?.name || '미분류';
+  const userName = allData.users?.find(u => String(u.id) === String(prompt.userId))?.name || '익명';
+  const categoryName = allData.categories?.find(c => String(c.id) === String(prompt.categoryId))?.name || '미분류';
 
   return(
     <div className={styles.container}>

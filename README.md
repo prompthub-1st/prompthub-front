@@ -284,7 +284,7 @@ const handleSubmit = (e) => {
 const mutation = useMutation({
   mutationFn: (id) => deletePrompt(id),
   onSuccess: () => {
-    // 💡 서버 데이터가 변경되었으므로 관련 쿼리를 무효화하여 UI 즉시 업데이트
+    // 서버 데이터가 변경되었으므로 관련 쿼리를 무효화하여 UI 즉시 업데이트
     queryClient.invalidateQueries(["prompts"]);
     router.push("/"); 
   },
