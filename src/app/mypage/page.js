@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 // import { useUserStore } from "@/store/useUserStore";
 import PromptList from "@/components/common/PromptList";
 import styles from "./page.module.css";
+import { fetchMe } from "../API/user";
 
 export default function MyPage() {
     const router = useRouter();
@@ -15,18 +16,9 @@ export default function MyPage() {
     useEffect(() => {
         const checkLogin = async () => {
             try {
-                const res = await fetch("http://localhost:8080/auth/me", {
-                    method: "GET",
-                    credentials: "include"
-                });
+                const userData = await fetchMe();
 
-                if (!res.ok) {
-                    router.replace("/");
-                    return;
-                }
-
-                const data = await res.json();
-                setUser(data);
+                setUser(userData);
 
             } catch (e) {
                 console.error(e);

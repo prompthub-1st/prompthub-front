@@ -33,3 +33,18 @@ export async function logout() {
 
     return result.data;
 }
+
+export async function fetchMe() {
+    const res = await fetch("http://localhost:8080/auth/me", {
+        method: "GET",
+        credentials: "include"
+    });
+
+    const result = await res.json();
+
+    if (!result.success) {
+        throw new Error(result.message);
+    }
+
+    return result.data;
+}

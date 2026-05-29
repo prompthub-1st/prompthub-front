@@ -9,14 +9,21 @@ export const usePromptStore = create((set) => ({
 
         console.log("🔥 userId:", userId, typeof userId);
         try {
-            const res = await fetch(`${BASE_URL}/prompts?userId=${Number(userId)}`);
-            const data = await res.json();
+            const res = await fetch(`http://localhost:8080/prompts?userId=${userId}`, {
+                credentials: "include"
+            });
+            const result = await res.json();
 
-            console.log("🔥 RESULT:", data);
+            console.log("🔥 RESULT:", result.data);
 
-            set({ prompts: data })
+            if (!result.success) {
+                throw new Error(result.message);
+            }
+
+            set({ prompts: result.data || [] });
         } catch (error) {
             console.error(error);
+            set({ prompts: [] })
         }
     }
 }))
