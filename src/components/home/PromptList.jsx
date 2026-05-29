@@ -18,7 +18,11 @@ export default function PromptList() {
 
   if (isLoading) return <div className={styles.loading}>로딩 중...</div>;
   if (isError) return <div className={styles.error}>데이터 로드 실패!</div>;
-  if (!data || !data.prompts) return <div className={styles.empty}>데이터가 비어있습니다.</div>;
+  if (!data || !data.length === 0) return <div className={styles.empty}>데이터가 비어있습니다.</div>;
+  // 백엔드 연동 전 코드
+  //if (!data || !data.prompts) return <div className={styles.empty}>데이터가 비어있습니다.</div>;
+
+
 
   // // 직접 합치기(Join)
   // const enrichedPrompts = data.prompts.map(prompt => {
@@ -42,17 +46,32 @@ export default function PromptList() {
   //   return matchesCategory && matchesSearch;
   // });
 
-  const filteredData = data.prompts
-    .map(prompt => ({
-      ...prompt,
-      userName: data.users.find(u => String(u.id) === String(prompt.userId))?.name || '익명',
-      categoryName: data.categories.find(c => String(c.id) === String(prompt.categoryId))?.name || '미분류'
-    }))
-    .filter(item => {
-      const matchesCategory = selectedCategory === 'all' || String(item.categoryId) === String(selectedCategory);
-      const matchesSearch = item.title.toLowerCase().includes(searchKeyword.toLowerCase());
-      return matchesCategory && matchesSearch;
-    })
+  // 백엔드 연동 전 코드
+  // const filteredData = data.prompts
+  //   .map(prompt => ({
+  //     ...prompt,
+  //     userName: data.users.find(u => String(u.id) === String(prompt.userId))?.name || '익명',
+  //     categoryName: data.categories.find(c => String(c.id) === String(prompt.categoryId))?.name || '미분류'
+  //   }))
+  //   .filter(item => {
+  //     const matchesCategory = selectedCategory === 'all' || String(item.categoryId) === String(selectedCategory);
+  //     const matchesSearch = item.title.toLowerCase().includes(searchKeyword.toLowerCase());
+  //     return matchesCategory && matchesSearch;
+  //   })
+
+  const filteredData = data.filter(item => {
+
+    const matchesCategory =
+      selectedCategory === 'all'  ||
+      String(item.categoryId) === String(selectedCategory);
+    
+    const matchesSearch =
+      item.title
+        .toLowerCase()
+        .includes(searchKeyword.toLowerCase());
+    
+    return matchesCategory && matchesSearch;
+  });
   
   
   // 📖 페이지네이션
@@ -67,7 +86,9 @@ export default function PromptList() {
         <>
           <div className={styles.grid}>
             {paginatedData.map(prompt => (
-              <PromptCard key={prompt.id} prompt={prompt} />
+              <PromptCard key={prompt.promptId} prompt={prompt}/>
+              // 백엔드 연동 전 코드
+              // <PromptCard key={prompt.id} prompt={prompt} />
             ))}
           </div>
           <Pagination totalPages={totalPages} />
