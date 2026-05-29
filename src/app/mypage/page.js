@@ -2,23 +2,45 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUserStore } from "@/store/useUserStore";
+// import { useUserStore } from "@/store/useUserStore";
 import PromptList from "@/components/common/PromptList";
 import styles from "./page.module.css";
 
 export default function MyPage() {
     const router = useRouter();
-    const user = useUserStore((state) => state.user);
 
-    const [mounted, setMounted] = useState(false);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setMounted(true);
-    }, [])
+        const checkLogin = async () => {
+            try {
+                const res = await fetch("http://localhost:8080/auth/me", {
+                    method: "GET",
+                    credentials: "include"
+                });
 
-    if (!mounted) return;
-    if (!user) {
-        router.replace('/')
+                if (!res.ok) {
+                    router.replace("/");
+                    return;
+                }
+
+                const data = await res.json();
+                setUser(data);
+
+            } catch (e) {
+                console.error(e);
+                router.replace("/");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        checkLogin();
+    }, [router]);
+
+    if (loading) {
+        return <p>로딩 중...</p>;
     }
 
     if (!user) {
@@ -29,12 +51,12 @@ export default function MyPage() {
         <div className={styles.container}>
             <div className={styles.header}>
                 <h1 className={styles.title}>마이페이지</h1>
-                <p className={styles.welcome}>{user.name}님 환영합니다</p>
+                <p className={styles.welcome}>{user.nickname}님 환영합니다</p>
             </div>
 
             <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>내가 쓴 프롬프트</h2>
-                <PromptList userId={user.id} />
+                <PromptList userId={user.userId} />
             </section>
         </div>
     );

@@ -10,10 +10,12 @@ export async function fetchUsers(id, password) {
         credentials: "include"
     });
 
-    if (!res.ok) {
-        throw new Error("로그인 실패");
+    const result = await res.json();
+
+    if (!result.success) {
+        throw new Error(result.message);
     }
-    return res;
+    return result.data;
 }
 
 export async function logout() {
@@ -23,9 +25,11 @@ export async function logout() {
         credentials: "include"
     });
 
-    if (!res.ok) {
-        throw new Error("로그아웃 실패");
+    const result = await res.json();
+
+    if (!result.success) {
+        throw new Error(result.message);
     }
 
-    return res;
+    return result.data;
 }
