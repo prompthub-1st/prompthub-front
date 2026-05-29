@@ -1,8 +1,50 @@
-export async function fetchUsers() {
-    const res = await fetch('http://localhost:3003/users')
+export async function fetchUsers(id, password) {
+    const formData = new URLSearchParams();
 
-    if (!res.ok) {
-        throw new Error('서버 응답 에러')
+    formData.append("id", id);
+    formData.append("password", password);
+
+    const res = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        body: formData,
+        credentials: "include"
+    });
+
+    const result = await res.json();
+
+    if (!result.success) {
+        throw new Error(result.message);
     }
-    return res.json()
+    return result.data;
+}
+
+export async function logout() {
+
+    const res = await fetch("http://localhost:8080/auth/logout", {
+        method: "POST",
+        credentials: "include"
+    });
+
+    const result = await res.json();
+
+    if (!result.success) {
+        throw new Error(result.message);
+    }
+
+    return result.data;
+}
+
+export async function fetchMe() {
+    const res = await fetch("http://localhost:8080/auth/me", {
+        method: "GET",
+        credentials: "include"
+    });
+
+    const result = await res.json();
+
+    if (!result.success) {
+        throw new Error(result.message);
+    }
+
+    return result.data;
 }
