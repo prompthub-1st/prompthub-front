@@ -1,3 +1,5 @@
+
+
 const BASE_URL = 'http://localhost:8080/api/prompts';
 
 
@@ -107,6 +109,15 @@ export const deletePrompt = async (promptId) => {
   return res.text();
 };
 
+export const fetchCategories = async () => {
+  const res = await fetch("http://localhost:8080/api/categories");
+  const json = await res.json();
+
+  console.log("CATEGORY RAW RESPONSE =>", json);
+
+  return json.data ?? json;
+};
+
 
 
 // =========================================
@@ -135,8 +146,6 @@ export const deletePrompt = async (promptId) => {
 //     categories: await categoriesRes.json()
 //   };
 // };
-
-
 
 
 // 특정 아이디의 상세 정보 1개를 가져오는 서비스
