@@ -26,7 +26,11 @@ export default function PromptList({ userId }) {
             ) : (
                 <div className={styles.grid}>
                     {prompts.map((prompt) => (
-                        <PromptCard key={prompt.id} prompt={prompt} />
+                        <PromptCard key={prompt.promptId} prompt={prompt} />
+
+                        // 백엔드 연동 전 코드
+                        // <PromptCard key={prompt.id} prompt={prompt} />
+
                     ))}
                 </div>
             )}
