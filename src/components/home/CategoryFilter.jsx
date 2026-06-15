@@ -15,11 +15,31 @@ export default function CategoryFilter() {
 
   if (isLoading) return <div className={styles.loading}>로딩 중...</div>
 
-  const categories = [{ id: 'all', name: '전체' }, ...(data?.categories || [])];
+  const categories = [
+  { id: 'all', name: '전체' },
+  ...(data?.categories || []).map(c => ({
+    id: c.categoryId,
+    name: c.name
+  }))
+];
 
   return (
     <div className={styles.container}>
-      { categories.map((cat) => (
+      {/* Spring Boot + MyBatis 사용 시 */}
+      {categories.map((cat) => (
+        <button
+          key={cat.id}
+          onClick={() => setCategory(String(cat.id))}
+          className={`${styles.categoryButton} ${
+            selectedCategory === String(cat.id) ? styles.active : ''
+          }`}
+        >
+          {cat.name}
+        </button>
+      ))}
+
+      {/* Servlet 사용 시 */}
+      {/* { { categories.map((cat) => (
         <button
           key={cat.id}
           onClick={() => setCategory(String(cat.id))}
@@ -27,7 +47,7 @@ export default function CategoryFilter() {
         >
           {cat.name}
         </button>
-      ))}
+      ))}} */}
     </div>
   );
 }

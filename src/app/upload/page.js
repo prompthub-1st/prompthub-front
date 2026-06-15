@@ -54,17 +54,20 @@ export default function UploadPage() {
           <div className={styles.categoryContainer}>
             {categories.map((cat) => (
               <button
-                key={cat.categoryId}
+                key={cat.id}
+                // key={cat.categoryId}
                 type="button"
                 className={`${styles.categoryButton} ${
-                  form.categoryId === String(cat.categoryId)
+                  form.categoryId === String(cat.id)
+                  // form.categoryId === String(cat.categoryId)
                     ? styles.selected
                     : ''
                 }`}
                 onClick={() =>
                   setForm({
                     ...form,
-                    categoryId: String(cat.categoryId)
+                    categoryId: String(cat.id)
+                    // categoryId: String(cat.categoryId)
                   })
                 }
               >

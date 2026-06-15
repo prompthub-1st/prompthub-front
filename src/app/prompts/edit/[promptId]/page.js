@@ -123,17 +123,20 @@ export default function PromptEditPage() {
             {categories.map((cat) => (
 
               <button
-                key={cat.categoryId}
+                key={cat.id}
+                // key={cat.categoryId}
                 type="button"
                 className={`${styles.categoryButton} ${
-                  formData.categoryId === String(cat.categoryId)
+                  formData.categoryId === cat.id
+                  // formData.categoryId === String(cat.categoryId)
                     ? styles.selected
                     : ""
                 }`}
                 onClick={() =>
                   setFormData({
                     ...formData,
-                    categoryId: String(cat.categoryId)
+                    categoryId: cat.id
+                    // categoryId: String(cat.categoryId)
                   })
                 }
               >
