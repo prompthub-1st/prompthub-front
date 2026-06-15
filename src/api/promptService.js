@@ -129,16 +129,20 @@ export const deletePrompt = async (promptId) => {
 
 // 카테고리
 export const fetchCategories = async () => {
-  const res = await fetch(
-    "http://localhost:8080/api/categories",
-    {
-      credentials: 'include'
-    }
-  );
+  const res = await fetch("http://localhost:8080/api/categories", {
+    credentials: "include"
+  });
 
   const json = await res.json();
 
-  return json.data ?? json;
+  if (!json.success) {
+    throw new Error(json.message || "카테고리 실패");
+  }
+
+  return (json.data ?? []).map(c => ({
+    id: c.categoryId,
+    name: c.name
+  }));
 };
 
 
