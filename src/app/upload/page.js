@@ -39,11 +39,8 @@ export default function UploadPage() {
     e.preventDefault();
     // 유효성 검사 (카테고리 선택 여부 등)
     if (!form.categoryId) return alert("카테고리를 선택해주세요!");
-    const requestData = {
-      ...form,
-      userId: 1
-    }
-    mutation.mutate(requestData);
+
+    mutation.mutate(form);
   };
 
   if (isLoading) return <div className={styles.loading}>카테고리 불러오는 중...</div>
@@ -59,8 +56,17 @@ export default function UploadPage() {
               <button
                 key={cat.categoryId}
                 type="button"
-                className={`${styles.categoryButton} ${form.categoryId === String(cat.categoryId) ? styles.selected : ''}`}
-                onClick={() => setForm({ ...form, categoryId: String(cat.categoryId) })}
+                className={`${styles.categoryButton} ${
+                  form.categoryId === String(cat.categoryId)
+                    ? styles.selected
+                    : ''
+                }`}
+                onClick={() =>
+                  setForm({
+                    ...form,
+                    categoryId: String(cat.categoryId)
+                  })
+                }
               >
                 {cat.name}
               </button>

@@ -2,33 +2,36 @@
 
 const BASE_URL = 'http://localhost:8080/api/prompts';
 
-
-
-// 전체 목록을 가져오는 서비스
+// 전체 목록
 export const fetchAllData = async () => {
-  
-  const promptsRes = await fetch(`${BASE_URL}/list`);
+  const res = await fetch(`${BASE_URL}/list`, {
+    credentials: 'include'
+  });
 
-  if (!promptsRes.ok) {
+  if (!res.ok) {
     throw new Error('데이터 로드 실패');
   }
-  
-  return await promptsRes.json();
+
+  return await res.json();
 };
 
-
-// 특정 아이디의 상세 정보 1개를 가져오는 서비스
+// 상세 조회
 export const fetchPromptById = async (id) => {
+  const res = await fetch(
+    `${BASE_URL}/detail?id=${id}`,
+    {
+      credentials: 'include'
+    }
+  );
 
-  const res = await fetch(`${BASE_URL}/detail?id=${id}`);
+  if (!res.ok) {
+    throw new Error("데이터를 불러오지 못했습니다.");
+  }
 
-  if (!res.ok) throw new Error("데이터를 불러오지 못했습니다.");
-
-  return res.json();
+  return await res.json();
 };
 
-
-// 새 프롬프트를 등록하는 서비스
+// 등록
 export const createPrompt = async (data) => {
   const body = new URLSearchParams();
 
@@ -41,27 +44,31 @@ export const createPrompt = async (data) => {
     `${BASE_URL}/create`,
     {
       method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body
-      }
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body
+    }
   );
-  
+
+  const result = await res.text();
+
   if (!res.ok) {
-    throw new Error('등록 실패');
+    throw new Error(result);
   }
 
-  return res.text();
+  return result;
 };
 
-
-// 수정하기
+// 수정
 export const updatePrompt = async ({
-    promptId,
-    categoryId,
-    title,
-    description,
-    content
- }) => {
+  promptId,
+  categoryId,
+  title,
+  description,
+  content
+}) => {
 
   const body = new URLSearchParams();
 
@@ -71,22 +78,28 @@ export const updatePrompt = async ({
   body.append("description", description);
   body.append("content", content);
 
-  const res = await fetch(`${BASE_URL}/update`, 
+  const res = await fetch(
+    `${BASE_URL}/update`,
     {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
       body
     }
   );
-  
-  if (!res.ok) {
-    throw new Error('수정 실패');
-  } 
 
-  return res.text();
+  const result = await res.text();
+
+  if (!res.ok) {
+    throw new Error(result);
+  }
+
+  return result;
 };
 
-// 삭제하기
+// 삭제
 export const deletePrompt = async (promptId) => {
 
   const body = new URLSearchParams();
@@ -97,27 +110,36 @@ export const deletePrompt = async (promptId) => {
     `${BASE_URL}/delete`,
     {
       method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
       body
     }
   );
 
+  const result = await res.text();
+
   if (!res.ok) {
-    throw new Error('삭제 실패');
+    throw new Error(result);
   }
 
-  return res.text();
+  return result;
 };
 
+// 카테고리
 export const fetchCategories = async () => {
-  const res = await fetch("http://localhost:8080/api/categories");
-  const json = await res.json();
+  const res = await fetch(
+    "http://localhost:8080/api/categories",
+    {
+      credentials: 'include'
+    }
+  );
 
-  console.log("CATEGORY RAW RESPONSE =>", json);
+  const json = await res.json();
 
   return json.data ?? json;
 };
-
 
 
 // =========================================
